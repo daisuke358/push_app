@@ -7,6 +7,13 @@ class MicropostsController < ApplicationController
     if @micropost.save
       flash[:success] = "投稿が作成されました！"
       redirect_to root_url
+
+      CreateNotification.call(
+        contents: { 'en' => 'Post created!', 'ja' => @micropost.content },
+        type: 'microposts#create'
+      )
+    
+
     else
       @feed_items = []
       render 'static/home'
